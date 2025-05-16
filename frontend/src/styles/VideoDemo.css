@@ -1,0 +1,111 @@
+.thread-page {
+  background-color: white;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-inline: auto;
+}
+
+.thread-page__thread {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+  height: fit-content;
+  padding: 6.5rem;
+  margin-inline: auto;
+  margin-block-start: 5rem;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  box-shadow: 0px -5px 8px rgba(0, 0, 0, 0.1);
+}
+
+.thread-page__thread-title {
+  width: 100%;
+  font-family: 'Inter';
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  overflow-wrap: normal;
+  word-wrap: break-word;
+}
+
+.thread-page__thread-video {
+  width: auto;
+  height: 500px;
+  margin-inline: 0rem;
+  margin-block-end: 5rem;
+}
+
+.thread-page__thread-created-date {
+  color: #6f6f6f;
+  font-family: 'Inter';
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.thread-page__thread-content {
+  width: 100%;
+  height: fit-content;
+  word-wrap: break-word;
+}
+
+.thread-page__thread-content .input__text-field .Mui-disabled {
+  color: black;
+  -webkit-text-fill-color: black;
+}
+
+.thread-page__thread-content .input__text-field > div > textarea {
+  margin-inline: auto;
+  text-align: justify;
+  font-family: 'Inter';
+  font-size: 1.1rem;
+}
+
+.thread-page__thread-content .input__text-field > div > fieldset {
+  border: none;
+}
+
+.thread-page__creator {
+  display: flex;
+  flex-direction: row;
+  margin-block-start: 2rem;
+  margin-block-end: 3rem;
+}
+
+.thread-page__creator-name {
+  font-family: 'Inter';
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.thread-page__creator-avatar {
+  width: 40px;
+  height: 40px;
+  margin-inline-end: 1rem;
+  border: solid 1.5rem;
+  border-color: black;
+  border-width: 0.15rem;
+  border-radius: 50%;
+}
+
+.thread-page__comments-section-label {
+  font-family: 'Inter';
+  font-size: 1.7rem;
+  font-weight: 800;
+}
+
+.dash-video-player {
+  width: 500px;
+  height: fit-content;
+  margin-inline: auto;
+}
+
+#video-demo {
+  /* display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5%;
+  width: 100%;
+  height: 100vh; */
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <h1>Summer Forum Sign In</h1>
+    <link rel="stylesheet" type="text/css" href="../css/cssOverview.css" />
+    <meta charset="utf-8" />
+    <style>
+      html {
+        background: linear-gradient(to bottom right, #9be15d, #00e3ae);
+      }
+      body {
+        padding: 5rem 5rem 10rem;
+        line-height: 1.7;
+        font-family: 'Nunito Sans', sans-serif;
+        color: #555;
+        min-height: 100vh;
+      }
+      .card__title-box {
+        margin-right: auto;
+        display: flex;
+        align-items: center;
+        padding: 0 3rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <form>
+      <label for="UserName">Account</label>
+      <input class="txt" type="text" id="UserName" name="UserName" />
+      <br />
+      <label for="Password">Password</label>
+      <input class="txt" type="text" id="Password" name="Password" />
+      <br />
+      <button type="submit" id="btn_SignIn" name="btn_SignIn">Sign In</button>
+    </form>
+    <br />
+    <a href="/sign/up"
+      ><button type="button" id="btn_SignUp" name="btn_SignUp">
+        Don't have account, signup
+      </button></a
+    >
+  </body>
+  <footer>
+    <a href="/"><button>Quay lại intro</button></a>
+  </footer>
+</html>

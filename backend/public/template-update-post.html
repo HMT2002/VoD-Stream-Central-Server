@@ -1,0 +1,81 @@
+<html title="SummerForum">
+  <link rel="stylesheet" type="text/css" href="/css/cssPost.css" />
+  <meta charset="utf-8" />
+
+  <header>
+    <style>
+      html {
+        background: linear-gradient(to bottom right, #9be15d, #00e3ae);
+      }
+      body {
+        padding: 5rem 5rem 10rem;
+        line-height: 1.7;
+        font-family: 'Nunito Sans', sans-serif;
+        color: #555;
+        min-height: 100vh;
+      }
+      .card__title-box {
+        margin-right: auto;
+        display: flex;
+        align-items: center;
+        padding: 0 3rem;
+      }
+    </style>
+  </header>
+
+  <body>
+    <div class="div_Main" name="div_Main" id="div_Main">
+      <div class="div_Display" name="div_Display" id="div_Display">
+        <div>
+          <form method="post" action="/post-update?id={%POSTID%}" enctype="multipart/form-data">
+            <label for="Title">nhập tiêu đề</label>
+            <textarea class="Title" type="text"></textarea>
+            <br />
+            <input type="file" id="image" accept=".mp4, .mkv, .flv|video/*" multiple value="Chọn video" />
+            <br />
+            <label for="Content">nhập nội dung</label>
+            <textarea class="Content" type="text"> </textarea>
+            <button
+              id="clearFormatting-1"
+              type="button"
+              tabindex="-1"
+              role="button"
+              title="Remove formatting"
+              class="fr-command fr-btn"
+              data-cmd="clearFormatting"
+            >
+              <i class="far fa-eraser" aria-hidden="true"></i><span class="fr-sr-only">Remove formatting</span></button
+            ><button
+              id="bold-1"
+              type="button"
+              tabindex="-1"
+              role="button"
+              aria-pressed="false"
+              title="Bold (Ctrl+B)"
+              class="fr-command fr-btn"
+              data-cmd="bold"
+            >
+              <i class="far fa-bold" aria-hidden="true"></i><span class="fr-sr-only">Bold</span>
+            </button>
+            <input
+              type="file"
+              id="image"
+              accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"
+              multiple
+              value="Chọn ảnh"
+            />
+            <select>
+              <option>Daily life</option>
+              <option>Technique</option>
+              <option>mỹ nghệ</option>
+              <option>Cruisine</option>
+            </select>
+            <input type="submit" value="đăng" />
+          </form>
+          <button id="btnFetchAPI" name="btnFetchAPI" onclick="FetchAPI();">click test</button>
+        </div>
+        <div id="holder" name="holder" class="holder"></div>
+      </div>
+    </div>
+  </body>
+</html>

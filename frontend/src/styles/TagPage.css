@@ -1,0 +1,19 @@
+.tag-page {
+  display: flex;
+  flex-direction: column;
+  width: inherit;
+  height: inherit;
+  padding-inline: 10rem;
+  padding-block-start: 5rem;
+}
+
+.tag-page .threads-container {
+  display: grid;
+  gap: 5rem;
+  grid-template-columns: auto auto auto;
+}
+
+.thread-grid-item {
+  justify-self: start;
+  align-self: center;
+}

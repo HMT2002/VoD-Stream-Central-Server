@@ -1,0 +1,48 @@
+.register-form {
+  display: flex;
+  flex-direction: column;
+  width: 330px;
+  height: fit-content;
+  padding: 3rem;
+  margin-inline: auto;
+  margin-block-start: 10rem;
+  font-family: 'Inter';
+  font-size: 0.9rem;
+}
+
+.register-form__message {
+  color: #d32f2f;
+}
+
+.register-form__title {
+  font-size: 30px;
+  font-weight: 500;
+  margin-block-start: 1rem;
+  margin-block-end: 1.5rem;
+}
+
+.register-form__input {
+  width: 320px;
+  height: 45px;
+  margin-block: 2rem;
+  margin-inline: auto;
+}
+
+.register-form__login-redirect {
+  display: flex;
+  width: fit-content;
+  margin-inline-start: auto;
+  margin-inline-end: 0.5rem;
+  margin-block-start: 1.5rem;
+  margin-block-end: 2rem;
+}
+
+.register-form__login-redirect a {
+  margin-inline-start: 0.5rem;
+  text-decoration: none;
+}
+
+.register-form__button {
+  width: 320px;
+  height: 42px;
+}

@@ -1,0 +1,31 @@
+[{
+  "_id": {
+    "$oid": "65984714e56610ab0d52ded2"
+  },
+  "username": "admin123",
+  "password": "$2a$10$3XYbphn8f13zOpE8UrLnRuOXWGKG6bLpboWw1fOYd653o.m4aejJa",
+  "passwordChangedAt": {
+    "$date": "2024-01-05T18:14:44.809Z"
+  },
+  "account": "admin123",
+  "email": "admin123@gmail.com",
+  "cert_paper": "",
+  "living_city": "",
+  "phone": "",
+  "address": "",
+  "birthday": null,
+  "premium": "normal",
+  "role": "admin",
+  "photo": {
+    "link": "https://i.imgur.com/KNJnIR0.jpg"
+  },
+  "points": 0,
+  "createdDate": {
+    "$date": "2024-01-05T18:14:44.910Z"
+  },
+  "lastUpdated": {
+    "$date": "2024-01-05T18:14:44.910Z"
+  },
+  "identifyNumber": "25158",
+  "__v": 0
+}]

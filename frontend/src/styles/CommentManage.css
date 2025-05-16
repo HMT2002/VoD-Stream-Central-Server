@@ -1,0 +1,98 @@
+.comment-manage {
+  width: 1100px;
+  height: fit-content;
+  border-style: solid;
+  border-color: rgb(221, 221, 221);
+  border-width: 0.1rem;
+}
+
+.comment-manage .container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  width: 1065px;
+  height: fit-content;
+  margin: 1rem;
+}
+
+.comment-manage .creator-avatar {
+  width: 40px;
+  height: 40px;
+  margin-inline-end: 1rem;
+  border-style: solid;
+  border-width: 0.1rem;
+  border-radius: 50%;
+}
+
+.comment-manage .creator-display-name {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.comment-manage .created-date {
+  color: #7b7b7b;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.comment-manage .content {
+  width: 600px;
+  height: fit-content;
+  inline-size: 600px;
+  margin-block: 0.5rem;
+  text-align: justify;
+  overflow-wrap: break-word;
+}
+
+.comment-manage .thread-part {
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  text-decoration: none;
+  margin-inline-end: 0rem;
+  margin-inline-start: auto;
+}
+
+.comment-manage .thread-video-thumbnail {
+  width: 130px;
+  height: 80px;
+  margin-inline-end: 1rem;
+  border-radius: 0.3rem;
+}
+
+.comment-manage .thread-title {
+  color: black;
+  width: 130px;
+  height: fit-content;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}
+
+.comment-manage .delete-control {
+  background-color: #d32f2f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 35px;
+  height: 35px;
+  margin-block-start: 0rem;
+  margin-block-end: auto;
+  margin-inline-start: 2rem;
+  margin-inline-end: 0rem;
+}
+
+.comment-manage .delete-control:hover {
+  opacity: 1;
+}
+
+.comment-manage .delete-control:hover .tool-tip {
+  visibility: visible;
+}
+
+.comment-manage .delete-control .tool-tip {
+  margin-block-start: -1rem;
+  margin-inline-start: 9rem;
+}

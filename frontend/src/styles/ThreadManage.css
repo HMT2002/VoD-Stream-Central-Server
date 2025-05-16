@@ -1,0 +1,133 @@
+.thread-manage {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 1050px;
+  height: 200px;
+  padding: 0.3rem;
+  margin-block-end: 1rem;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.thread-manage__video {
+  width: 300px;
+  height: 200px;
+  border-radius: 0.5rem;
+}
+
+.thread-manage__video-onload {
+  background-color: black;
+  display: flex;
+  flex: 0 0 304px;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  border-radius: 0.5rem;
+}
+
+.thread-manage__details {
+  color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 600px;
+  height: 180px;
+  margin-block: 0.5rem;
+  margin-inline: 1rem;
+  text-decoration: none;
+}
+
+.thread-manage__creator-avatar {
+  width: 15px;
+  height: 15px;
+  margin-inline-end: 0.5rem;
+  border-style: solid;
+  border-color: black;
+  border-width: 0.15rem;
+  border-radius: 50%;
+}
+
+.thread-manage__creator-display-name {
+  color: #7b7b7b;
+  width: fit-content;
+  height: fit-content;
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.thread-manage__title {
+  display: flex;
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.thread-manage__content {
+  display: -webkit-box;
+  width: inherit;
+  height: fit-content;
+  word-wrap: break-word;
+  font-size: 1.1rem;
+  text-align: justify;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+}
+
+.thread-manage__controls {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+  height: 200px;
+  width: 100%;
+  margin-inline-end: 0.5rem;
+}
+
+.thread-manage__controls .edit-control {
+  background-color: #53408b;
+  margin-block-start: 1rem;
+}
+
+.thread-manage__controls .delete-control {
+  background-color: #d32f2f;
+  margin-block-start: 0.3rem;
+}
+
+.thread-manage__controls button {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 35px;
+  height: 35px;
+  margin: 0rem;
+  margin-block-start: auto;
+  margin-block-end: 0rem;
+}
+
+.thread-manage__controls button svg {
+  width: inherit;
+  height: inherit;
+}
+
+.thread-manage__controls .edit-control .tool-tip {
+  margin-block-start: -1rem;
+  margin-inline-start: 7rem;
+}
+
+.thread-manage__controls .delete-control .tool-tip {
+  margin-block-start: -1rem;
+  margin-inline-start: 8rem;
+}
+
+.thread-manage__controls button:hover {
+  opacity: 1;
+}
+
+.thread-manage__controls button:hover .tool-tip {
+  visibility: visible;
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <link rel="stylesheet" type="text/css" href="../css/cssOverview.css" />
+    <meta charset="utf-8" />
+
+    <style>
+      html {
+        background: linear-gradient(to bottom right, #9be15d, #00e3ae);
+      }
+      body {
+        padding: 5rem 5rem 10rem;
+        line-height: 1.7;
+        font-family: 'Nunito Sans', sans-serif;
+        color: #555;
+        min-height: 100vh;
+      }
+      .card__title-box {
+        margin-right: auto;
+        display: flex;
+        align-items: center;
+        padding: 0 3rem;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/sign-in"><button>Sign in</button></a>
+    <a href="/sign-up"><button>Sign up</button></a>
+    <a href="/sign-out"><button>Sign out</button></a>
+
+    <div class="card_title-box">{%POST_CARD%}</div>
+    <a href="/create-post"><button>Create post</button></a>
+
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <div>
+        <label for="file">Upload file: </label>
+        <input type="file" name="file" />
+      </div>
+      <div>
+        <button>Upload File</button>
+      </div>
+    </form>
+  </body>
+</html>

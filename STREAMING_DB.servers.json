@@ -1,0 +1,23 @@
+[
+  {
+    "_id": {
+      "$oid": "657bd0d8394f5c82467a79b7"
+    },
+    "URL": "localhost:9100",
+    "port": "",
+    "avarageSpeed": 440.7483704494299,
+    "numberOfRequest": 628.5,
+    "description": "no",
+    "createdDate": {
+      "$date": "2023-10-13T15:58:16.061Z"
+    },
+    "lastUpdated": {
+      "$date": "2023-10-13T15:58:16.061Z"
+    },
+    "__v": 240,
+    "occupy": 32625,
+    "occupyPercentage": 65.25,
+    "storage": 50000,
+    "videos": []
+  }
+]

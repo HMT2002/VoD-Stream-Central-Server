@@ -1,0 +1,158 @@
+<html title='SummerForum'>
+<meta charset='utf-8' />
+
+<header>
+    <h1>Summer Forum Testing</h1>
+    <a href='/'><button id="btn_Back" name="btn_Back">Trở lại</button></a>
+
+    <style>
+.div_Main {
+  position: relative;
+  display: inline;
+  background-color: rgb(4, 166, 172);
+}
+
+div,
+h1,
+h2,
+h4,
+label {
+  color: rgb(12, 247, 24);
+}
+
+html {
+  /* background-image: url('images/676334.jpg'); */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background: linear-gradient(to bottom right, #9be15d, #00e3ae);
+
+}
+
+.div_Main {
+  display: block;
+  background-color: rgb(11, 124, 223);
+  box-sizing: border-box;
+  border-radius: 5px;
+  height: auto;
+  width: 600px;
+  padding: 10px;
+  vertical-align: top;
+}
+
+.dynamical_div_Textdisplay {
+  color: rgb(234, 250, 7);
+  display: inline-block;
+}
+
+.dynamical_div_Title {
+  display: block;
+  width: 300px;
+  height: 30px;
+  margin: 16px;
+
+  color: rgb(9, 25, 250);
+}
+.dynamical_div_Comment{
+  display: block;
+    width: 70%;
+    height: 50px;
+    margin: 30px;
+  
+    color: rgb(9, 250, 21);
+}
+
+.Title {
+  color: rgb(255, 0, 0);
+}
+
+.dynamical_div_Content {
+  display: block;
+  width: 300px;
+  height: 30px;
+  margin: 16px;
+  color: rgb(250, 9, 9);
+}
+
+.Title {
+
+  width: 400px;
+  height: 40px;
+
+}
+
+.Content {
+
+  text-align: left;
+  display: block;
+  word-wrap: break-word;
+  width: 400px;
+  height: 300px;
+}
+
+.holder {
+  width: 400px;
+  height: 210px;
+  background-color: aliceblue;
+}
+
+.dynamical_div_Image {
+  width: 100px;
+  height: 100px;
+  margin: auto;
+  display: inline-block;
+  position: relative;
+}
+
+.img_Avatar {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+
+.post-image {
+    text-align: center;
+    background: #000;
+    position: relative;
+}
+    </style>
+
+    <!-- <audio id='au_backgoundBGM' loop='infinite' autoplay>
+        <source src='musics/playlist0.mp3' type='audio/mpeg' />
+    </audio> -->
+</header>
+
+<body>  
+  {%UPDATEPOST_BUTTON%}
+
+    <div class='div_Main' >
+        <div class='div_Display'>
+            <div class='dynamical_div_Textdisplay'>
+                <p class="dynamical_div_Title">{%POSTTITLE%}</p>
+                <p class="dynamical_div_Link">{%POSTLINK%}</p>
+                <div class="dynamical_div_Content">{%POSTCONTENT%}</div>
+            </div>
+            <div><img alt="nothing" width="100" height="100" src="https://res.cloudinary.com/dd6jkjkfp/image/upload/v1660662802/npqgsrj18tqqd8p97g18.jpg"></div>
+            <div><img alt="nothing" width="100" height="100" src="https://i.imgur.com/f01Ert6.jpg"></div>
+            <!-- <div><img alt="nothing" width="100" height="100" src="https://proxy.duckduckgo.com/iu/?u=https://i.imgur.com/f01Ert6.jpg"></div> -->
+            <div><img alt="nothing" width="100" height="100" src="https://cdn.discordapp.com/attachments/1011465120502775821/1064203817735962814/85a149beb36a8543b2038553bf5cfbd1_-_Copy.jpg"></div> 
+            {%VIDEO%}
+            <p class="dynamical_div_Content">{%POSTUSER%}</p>
+
+        </div>
+
+        
+        <div class="div_Comment" >
+
+        </div>
+
+    </div>
+    </div>
+
+</body>
+<footer>
+    <h4>blueseabinhtien@yahoo.com.vn</h4>
+</footer>
+
+</html>

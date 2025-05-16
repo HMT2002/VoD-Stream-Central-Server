@@ -1,0 +1,95 @@
+.thread {
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 350px;
+  height: 320px;
+  font-family: 'Inter';
+  border-radius: 0px 40px;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.thread a {
+  text-decoration: none;
+}
+
+.thread:hover {
+  cursor: pointer;
+  box-shadow: 8px 8px 4px rgba(0, 0, 0, 0.3);
+}
+
+.thread-creator {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+}
+
+.thread-creator.avatar {
+  width: 30px;
+  height: 30px;
+  margin-block: 0.3rem;
+  margin-inline-start: 0.3rem;
+  margin-inline-end: 0.5rem;
+  border: 1px solid #53408b;
+  border-radius: 50%;
+}
+
+.thread-creator.display-name {
+  color: #7b7b7b;
+  margin-block: 0rem;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.thread-video-thumbnail {
+  width: inherit;
+  height: 150px;
+}
+
+.thread-summary {
+  display: block;
+  width: 100%;
+  height: 90px;
+  white-space: wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.thread-summary.title {
+  display: block;
+  width: 95%;
+  height: fit-content;
+  margin-block: 0.3rem;
+  font-size: 1rem;
+  font-weight: 700;
+  text-indent: 0.5rem;
+  white-space: nowrap;
+}
+
+.thread-summary.content {
+  display: -webkit-box;
+  width: 95%;
+  height: auto;
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.3rem;
+  margin-block: 0.3rem;
+  margin-inline: 0.5rem;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.thread-create-date {
+  color: #7b7b7b;
+  display: block;
+  width: fit-content;
+  height: fit-content;
+  align-self: end;
+  margin-block: 0rem;
+  margin-inline-end: 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 400;
+}

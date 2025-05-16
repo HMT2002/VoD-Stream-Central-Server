@@ -1,0 +1,132 @@
+.comment {
+  color: black;
+  display: flex;
+  flex-direction: row;
+  width: inherit;
+  height: fit-content;
+  margin-block: 2rem;
+  margin-inline-start: 0;
+  margin-inline-end: auto;
+}
+
+.comment__creator-avatar {
+  width: 40px;
+  height: 40px;
+  margin-inline-end: 1rem;
+  border: solid 1.5rem;
+  border-color: black;
+  border-width: 0.15rem;
+  border-radius: 50%;
+}
+
+.comment__details {
+  display: flex;
+  flex-direction: row;
+}
+
+.comment__details__creator-name {
+  color: black;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: large;
+  text-decoration: none;
+  margin-inline-end: 0.5rem;
+}
+
+.thread-host {
+  background-color: #3f3f3f;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  padding-block: 0.05rem;
+  padding-inline: 0.3rem;
+  border-radius: 0.5rem;
+}
+
+.comment__details__created-date {
+  color: #bdbdbd;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: flex-start;
+  font-family: inherit;
+  font-size: small;
+}
+
+.comment__content {
+  width: 740px;
+  font-family: inherit;
+  text-align: justify;
+}
+
+.comment__content > div > div {
+  padding: 0.5rem;
+  text-align: justify;
+}
+
+.comment__content .input__text-field > div > textarea {
+  text-align: justify;
+  font-size: 0.97rem;
+}
+
+.comment-edit-controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-block-start: 0.5rem;
+}
+
+.comment-edit-controls button {
+  background-color: transparent;
+  margin-inline-start: 0rem;
+  margin-inline-end: 1.5rem;
+}
+
+.comment-controls {
+  display: flex;
+  flex-direction: column;
+  width: 40px;
+  height: inherit;
+  margin-inline-end: 0rem;
+  margin-inline-start: auto;
+  visibility: hidden;
+}
+
+.comment:hover .comment-controls {
+  visibility: visible;
+}
+
+.comment-controls .control-options {
+  background-color: transparent;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: inherit;
+  height: 50px;
+  margin-inline: 0rem;
+  margin-block-start: 0rem;
+  margin-block-end: auto;
+  padding-inline: 0rem;
+  padding-block: 0rem;
+}
+
+.comment-controls .controls-container {
+  background-color: #3f3f3f;
+  position: absolute;
+  width: 100px;
+  margin-block-start: 0.75rem;
+  margin-inline-start: 2rem;
+  border-radius: 0.5rem;
+}
+
+.controls-container button {
+  background-color: transparent;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding-block: 0.5rem;
+}

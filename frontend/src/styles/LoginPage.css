@@ -1,0 +1,61 @@
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 330px;
+  height: fit-content;
+  padding: 3rem;
+  margin-inline: auto;
+  /* margin-block-start: 10rem; */
+  font-family: 'Inter';
+  font-size: 0.9rem;
+  overflow: hidden;
+}
+
+.login-form__title {
+  font-size: 30px;
+  font-weight: 500;
+  /* margin-block-start: 1rem;
+    margin-block-end: 3.5rem; */
+}
+
+.login-form__message {
+  color: #d32f2f;
+}
+
+.login-form__input {
+  width: 320px;
+  height: 45px;
+  margin-block: 1.8rem;
+  margin-inline: auto;
+}
+
+.login-form__additional {
+  justify-content: space-between;
+  margin-inline: 0.3rem;
+  margin-block-start: 1.5rem;
+  margin-block-end: 3rem;
+}
+
+.login-form__additional span {
+  font-size: 0.9rem;
+}
+
+.login-form__forget-password {
+  width: fit-content;
+  margin-block: auto;
+  text-decoration: none;
+}
+
+.login-form__button {
+  width: 320px;
+  height: 42px;
+}
+
+.login-form__button.register {
+  background-color: #53408b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-block-start: 0.5rem;
+  text-decoration: none;
+}

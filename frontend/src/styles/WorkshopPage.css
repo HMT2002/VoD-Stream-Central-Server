@@ -1,0 +1,108 @@
+.workshop-page {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: inherit;
+  height: fit-content;
+  min-height: 85%;
+  padding-inline: 10rem;
+  padding-block-start: 5rem;
+}
+
+.workshop-page__title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-block-end: 3rem;
+}
+
+.workshop-page__tab-bar {
+  background-color: rgb(245, 245, 245);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 210px;
+  height: fit-content;
+  margin-block-start: 5rem;
+  padding-block-start: 2rem;
+  padding-block-end: 5rem;
+  padding-inline: 1rem;
+  border-radius: 0.5rem;
+}
+
+.workshop-page__tab-bar__item {
+  background-color: transparent;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  margin-block: 0.7rem;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.workshop-page__tab-bar__new-thread-btn {
+  background-color: transparent;
+  color: #53408b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 148px;
+  margin-block-end: 2rem;
+  margin-inline: 0rem;
+  padding-inline: 1rem;
+  padding-block: 0.5rem;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 700;
+  border: 1px solid #53408b;
+  border-radius: 0.2rem;
+}
+
+.workshop-page__tab-bar__new-thread-icon {
+  color: #53408b;
+  width: 23px;
+  height: 23px;
+  margin-inline-end: 0.5rem;
+}
+
+.workshop-page__tab {
+  display: flex;
+  flex-direction: column;
+  width: 1079px;
+  height: auto;
+  margin-inline: auto;
+}
+
+.workshop-page__tab .no-content-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: inherit;
+  height: 100%;
+}
+
+.no-content-tab .icon {
+  width: 100px;
+  height: 100px;
+  margin-block-start: 10rem;
+}
+
+.no-content-tab .text {
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-block-start: 0.5rem;
+  margin-block-end: 1rem;
+}
+
+.no-content-tab .redirect-btn {
+  background-color: #13088e;
+  width: fit-content;
+  height: fit-content;
+  margin-block-start: 1rem;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+  font-size: 1.2rem;
+}

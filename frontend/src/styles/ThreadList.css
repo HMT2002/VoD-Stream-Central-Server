@@ -1,0 +1,11 @@
+.thread-list.wrapper {
+  display: flex;
+  height: inherit;
+  width: inherit;
+  padding-block-end: 0.5rem;
+  overflow-x: hidden;
+}
+
+.thread-list div {
+  margin-inline: 0.7rem;
+}

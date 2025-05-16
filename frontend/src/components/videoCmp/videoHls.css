@@ -1,0 +1,81 @@
+.logger-box{
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+}
+
+.pre-current-status{
+   flex: 1;
+   display: block; 
+   max-width: 700px;
+   min-width: 500px;
+   height: 50px;
+}
+.logger-message-MANIFEST_PARSE{
+    background-color: black;
+    color: white;
+}
+
+.main-div{
+    display: inline;
+    /* vertical-align: middle; */
+}
+
+.logger-message-MANIFEST_LOADED{
+    background-color: rgb(3, 233, 250);
+}
+.logger-message-hlsFragLoaded{
+    background-color: rgb(228, 253, 0);
+}
+.logger-message-FRAG_BUFFERED{
+    background-color: rgb(237, 2, 245);
+}
+.logger-message-hlsFragChanged{
+    background-color: rgb(255, 174, 0);
+}
+.logger-message-FRAG_DECRYPTED{
+    background-color: rgb(255, 0, 140);
+}
+.logger-message-FRAG_LOADING{
+    background-color: rgb(4, 0, 248);
+    color: aliceblue;
+
+}
+.logger-message-hlsFragParsed{
+    background-color: rgb(9, 255, 0);
+}
+.logger-message-hlsBufferAppending{
+    background-color: rgb(1, 78, 74);
+    color: aliceblue;
+
+}
+.logger-message-hlsBufferAppended{
+    background-color: rgb(3, 0, 173);
+    color: aliceblue;
+
+}
+.event-status{
+    white-space: pre-wrap;
+    overflow-y: scroll;
+    flex: 1;
+    display: flex;
+    flex-direction:row;
+    height: 100vh;
+    max-width: 700px;
+    min-width: 500px;
+    max-height: 200px;
+}
+
+.hls-main-video{
+    flex:3;
+    overflow-x: auto;
+    
+}
+.canvas-main-video{
+    display: inline-block;
+    flex: 1;
+    display: block;
+    width: 1334px;
+    height: 200px;
+    touch-action:manipulation
+}

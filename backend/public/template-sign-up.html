@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html title="Sign In">
+  <head>
+    <h1>
+      Đăng kí ( phải khác tên đăng nhập và tên hiển thị so với cái acc khác)
+    </h1>
+    <link rel="stylesheet" type="text/css" href="../css/cssOverview.css" />
+    <meta charset="utf-8" />
+    <style>
+      html {
+        background: linear-gradient(to bottom right, #9be15d, #00e3ae);
+      }
+      body {
+        padding: 5rem 5rem 10rem;
+        line-height: 1.7;
+        font-family: 'Nunito Sans', sans-serif;
+        color: #555;
+        min-height: 100vh;
+      }
+      .card__title-box {
+        margin-right: auto;
+        display: flex;
+        align-items: center;
+        padding: 0 3rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <form>
+        <label for="UserName" class="txtsignup">Tên đăng nhập</label>
+        <input type="text" name="UserName" id="UserName" />
+        <br />
+        <label for="Password" class="txtsignup">Mật khẩu</label>
+        <input type="text" name="Password" id="Password" />
+        <br />
+        <label for="RePassword" class="txtsignup">Xác nhận mật khẩu</label>
+        <input type="text" name="RePassword" id="RePassword" />
+        <br />
+        <label for="DisplayName" class="txtsignup">Tên hiển thị</label>
+        <input type="text" name="DisplayName" id="DisplayName" />
+        <br />
+        <input
+          type="file"
+          name="TenFileNameORouteVaHbsPhaiGiongNhau"
+          onchange="readURL(this);"
+          id="image"
+          class="txtsignup"
+          accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"
+          value="Xin hãy chọn ảnh đại diện"
+        />
+        <br />
+        <input
+          type="submit"
+          name="btnDangKi"
+          id="btnDangKi"
+          class="txtsignup"
+          value="Đăng kí"
+        />
+      </form>
+      <a href="/"
+        ><button type="button" name="btnIntro" id="btnIntro">
+          Quay lại intro
+        </button></a
+      >
+      <h4 class="txtsignup boldtxt" id="txtWarning"></h4>
+      <img id="displayImage" name="displayImage" />
+    </div>
+  </body>
+</html>

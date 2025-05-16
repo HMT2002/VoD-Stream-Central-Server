@@ -1,0 +1,16 @@
+sudo apt-get update
+sudo apt install git
+sudo apt install nginx
+git clone "https://github.com/HMT2002/xxxx.git"
+curl -s https://deb.nodesource.com/setup_20.x | sudo bash
+sudo apt install nodejs -y
+node -v
+cd xxxx
+cd backend
+sudo cp default /etc/nginx/sites-enabled/default
+sudo cp nginx.conf /etc/nginx/nginx.conf
+sudo nginx -t
+sudo npm install
+sudo npm install pm2 -g
+sudo service nginx restart
+sudo pm2 start server.js

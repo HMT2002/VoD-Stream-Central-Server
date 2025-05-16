@@ -1,0 +1,127 @@
+.app-header {
+  background-color: white;
+  position: sticky;
+  /* top: 0;
+  left: 0;
+  right: 0; */
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 50px;
+  box-shadow: 0px 5px 5px #5f5f5f5f;
+}
+
+.app-header__container {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: inherit;
+  height: inherit;
+  padding-inline: 1.5rem;
+}
+
+.app-header__logo {
+  color: black;
+  height: fit-content;
+  width: fit-content;
+  margin-inline-start: 1.5rem;
+  margin-inline-end: 0rem;
+  font-size: 1.75rem;
+  font-weight: bolder;
+  text-decoration: none;
+}
+
+.app-header__burger-menu__button {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  margin-inline: 0rem;
+  margin-block: 0rem;
+}
+
+.app-header__burger-menu__button.icon {
+  color: black;
+  width: 30px;
+  height: 30px;
+  margin-inline: 0rem;
+}
+
+.app-header__burger-menu__button :hover {
+  cursor: pointer;
+}
+
+.app-header__unauthorized {
+  color: black;
+  display: flex;
+  flex-direction: row;
+  font-family: 'Inter';
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  align-items: center;
+}
+
+.app-header__unauthorized:hover {
+  opacity: 0.5;
+}
+
+.app-header__unauthorized.login {
+  margin-inline-start: 0rem;
+  margin-inline-end: 1.5rem;
+}
+
+.app-header__unauthorized.register {
+  margin-inline-end: 1rem;
+}
+
+.app-header__unauthorized__icon {
+  color: black;
+  margin-inline-end: 0.5rem;
+}
+
+.app-header__unauthorized__icon.login {
+  width: 30px;
+  height: 30px;
+}
+
+.app-header__unauthorized__icon.register {
+  width: 25px;
+  height: 25px;
+}
+
+.app-header__authorized-avatar {
+  width: 30px;
+  height: 30px;
+  margin-inline: 0rem;
+  border: solid 1rem;
+  border-color: black;
+  border-width: 0.1rem;
+  border-radius: 50%;
+}
+
+.app-header__authorized-logout {
+  background-color: transparent;
+  color: black;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-inline-start: 1.5rem;
+  margin-inline-end: 0rem;
+  font-family: 'Inter';
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.app-header__authorized-logout.icon {
+  color: black;
+  width: 30px;
+  height: 30px;
+  margin-inline-start: 0rem;
+  margin-inline-end: 0.2rem;
+}

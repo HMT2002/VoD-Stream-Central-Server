@@ -1,0 +1,43 @@
+.comment-input__form {
+  display: flex;
+  flex-direction: row;
+}
+
+.comment-input__user-avatar {
+  width: 40px;
+  height: 40px;
+  margin-inline-end: 1rem;
+  border: solid 1.5rem;
+  border-color: black;
+  border-width: 0.15rem;
+  border-radius: 50%;
+}
+
+.comment-input__input-field {
+  color: black;
+  width: 100%;
+}
+
+.comment-input__input-field {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.comment-input__input-field > div > div {
+  padding: 1rem;
+}
+
+.comment-input__input-field div [attribute='input__text-field'] {
+  padding: 1rem;
+}
+
+.comment-input__submit-button {
+  background-color: #1a0065;
+  font-family: 'Inter';
+  padding-block: 0.5rem;
+  padding-inline: 1.5rem;
+  margin-block-start: 1rem;
+  margin-inline-end: 0%;
+  margin-inline-start: auto;
+  border-radius: 3px;
+}
