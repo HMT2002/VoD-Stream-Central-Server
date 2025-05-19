@@ -14,8 +14,6 @@ const router = express.Router();
 const tempHls = fs.readFileSync('./public/client.html', 'utf-8');
 
 //ROUTE HANDLER
-router.route('/upload-video-drive').post(uploadVideo, videoController.UploadNewFileDrive);
-router.route('/upload-video-firebase').post(uploadVideo, videoController.UploadNewFileFirebase);
 
 router.route('/ffmpeg').post(videoController.FFmpeg);
 router.route('/video-stream-file/:filename').get(videoController.VideoStreamingFile);

@@ -10,3 +10,4 @@ node_modules
 backend/*.ts
 *.m4s
 *.mpd
+*.env

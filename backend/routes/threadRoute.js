@@ -34,8 +34,6 @@ router.route('/search/:title').get(threadController.SearchThreads);
 
 router.route('/top-5-popular').get(threadController.aliasTop5Threads, threadController.GetAllThreads);
 
-router.route('/upload-video').post(uploadVideo, videoController.GetVideoThumbnail, videoController.UploadNewFileDrive);
-
 // router.route('/upload-video-onedrive').post(uploadVideo, threadController.UploadNewFileOnedrive);
 
 router.route('/user/:userId').get(threadController.GetAllThreadsByUserId);

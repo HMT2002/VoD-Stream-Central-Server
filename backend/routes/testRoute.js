@@ -15,9 +15,6 @@ const tempHls = fs.readFileSync('./public/client.html', 'utf-8');
 
 //ROUTE HANDLER
 
-router.route('/multipart-upload').post(uploadVideo, testController.UploadNewFile);
-
-router.route('/upload-video').post(uploadVideo, testController.UploadNewFile);
 router.route('/upload-video-large').post(uploadVideo, testController.UploadNewFileLarge);
 router
   .route('/upload-video-large-multipart')
