@@ -68,7 +68,7 @@ const uploadMultipartFile = multer({
 const uploadMultipartFileChunk = multer({
   storage: storageChunk,
   limits: { fileSize: multipartMaxSize },
-}).single('myMultilPartFileChunk');
+}).single('multipartFileChunk');
 
 const uploadArrayFile = multer({
   storage: storage,

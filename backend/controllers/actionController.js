@@ -40,15 +40,15 @@ exports.GetVideoByID = catchAsync(async (req, res, next) => {
 });
 
 exports.GetInfoByID = catchAsync(async (req, res, next) => {
-  const infoID = req.params.infoID;
-  if (!infoID) {
+  const infoId = req.params.infoId;
+  if (!infoId) {
     res.status(200).json({
       status: 400,
-      message: 'Request body missing infoID',
+      message: 'Request body missing infoId',
     });
     return;
   }
-  const info = await Info.findById(infoID);
+  const info = await Info.findById(infoId);
 
   req.info = info;
   next();

@@ -25,12 +25,13 @@ type Server = {
   storage?: number;
   videos?: Array<Number>;
 };
+const proxy = process.env.NEXT_PUBLIC_PROXY_CLOUD;
 
 const MovieDashboard: React.FC = () => {
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ['servers'],
     queryFn: async () => {
-      const response = await fetch(process.env.NEXT_PUBLIC_PROXY_CLOUD + '/api/v1/server');
+      const response = await fetch(proxy + '/api/v1/server');
       const jsonData = response.json();
       return jsonData;
     },

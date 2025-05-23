@@ -29,12 +29,14 @@ router.route('/dash/:filenamebase/:filename*.m4s').get((req, res, next) => {
   console.log('Request URL:', req.originalUrl + ' - > redirectRouter -> ');
   next();
 }, redirectController.M4SHandler);
+
+//#region IMPORTANT: Initial request for redirecting to sub-erver
 router.route('/dash/:filenamebase/:filename').get((req, res, next) => {
   console.log('Request URL:', req.originalUrl + ' - > redirectRouter -> ');
   next();
 }, redirectController.RedirectDash);
-//bỏ cuộc đi, không rediect sang rtmp đc đâu
 // router.route('/live/:filename').get(redirectController.RedirectLive);
+//#endregion
 
 router.route('/replicate/send-file').post((req, res, next) => {
   console.log('Request URL:', req.originalUrl + ' - > redirectRouter -> ');
@@ -77,9 +79,9 @@ router.route('/upload-video-large-multipart-dash').post(
 );
 // 2 cái trên thì có formData và headers hơi nhức đầu tí
 // const formData = new FormData();
-// formData.append('myMultilPartFileChunk', chunk);
-// formData.append('myMultilPartFileChunkIndex', chunkIndex);
-// formData.append('arraychunkname', arrayChunkName);
+// formData.append('multipartFileChunk', chunk);
+// formData.append('multipartFileChunkIndex', chunkIndex);
+// formData.append('chunkNames', chunkNames);
 //     {
 //     method: 'POST',
 //     body: formData,
@@ -88,7 +90,7 @@ router.route('/upload-video-large-multipart-dash').post(
 //       index: index,
 //       chunkname: chunkName,
 //       filename: filename,
-//       arrayChunkName,
+//       chunkNames,
 //       ext,
 //     },
 router.route('/request-upload-url-hls').post((req, res, next) => {
@@ -103,17 +105,19 @@ router.route('/request-upload-url-dash').post(
   redirectController.PreferUploadURL,
   redirectController.RequestUploadURLDash
 );
+
+//IMPORTANT: Upload request route
 router.route('/available-upload-url-dash-weight-allocate').post((req, res, next) => {
   console.log('Request URL:', req.originalUrl + ' - > redirectRouter -> ');
   next();
-}, redirectController.RequestUploadURLDashWeightAllocate);
+}, redirectController.getUploadURLDashWeightAllocate);
 router.route('/available-upload-url-dash-first-fit').post((req, res, next) => {
   console.log('Request URL:', req.originalUrl + ' - > redirectRouter -> ');
   next();
-}, redirectController.RequestUploadURLDashFirstFit);
+}, redirectController.getUploadURLDashFirstFit);
 router.route('/available-upload-url-dash-best-fit').post((req, res, next) => {
   console.log('Request URL:', req.originalUrl + ' - > redirectRouter -> ');
   next();
-}, redirectController.RequestUploadURLDashBestFit);
+}, redirectController.getUploadURLDashBestFit);
 
 module.exports = router;

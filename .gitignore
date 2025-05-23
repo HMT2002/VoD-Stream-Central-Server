@@ -11,3 +11,5 @@ backend/*.ts
 *.m4s
 *.mpd
 *.env
+dashboard/.next
+.vscode/settings.json

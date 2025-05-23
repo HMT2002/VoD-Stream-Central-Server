@@ -123,10 +123,10 @@ const ServerModal = ({ data: serverArray, title, type }: { data?: Server[]; titl
     fileSize,
     file,
     chunkName,
-    arrayChunkName,
-    fullUploadURL,
-    totalChunks,
-    statusID
+    chunkNames,
+    fullUploadUrl,
+    countChunks,
+    statusId
   ) {
     setTimeout(async function () {
       const start = chunkIndex * chunkSize;
@@ -135,44 +135,32 @@ const ServerModal = ({ data: serverArray, title, type }: { data?: Server[]; titl
       // Make an API call to upload the chunk to the backend
       const ext = file?.name.split('.').pop();
       const title = chunkName;
-      const infoID = null;
-      await uploadUtils.uploadChunkDashVer2(
+      const infoId = null;
+      await uploadUtils.uploadDashVideoChunkV2(
         chunk,
         chunkIndex,
-        // arrayChunkName[chunkIndex],
-        arrayChunkName,
+        chunkNames,
         chunkName,
         ext,
         title,
-        infoID,
-        fullUploadURL,
-        statusID
+        infoId,
+        fullUploadUrl,
+        statusId
       );
       console.log({
         chunk,
         chunkIndex,
-        // arrayChunkNamechunkIndex: arrayChunkName[chunkIndex],
-        arrayChunkName,
+        chunkNames,
         chunkName,
         ext,
         title,
-        infoID,
-        fullUploadURL,
-        statusID,
+        infoId,
+        fullUploadUrl,
+        statusId,
       });
       chunkIndex++;
-      if (chunkIndex < totalChunks) {
-        uploadLoop(
-          chunkIndex,
-          chunkSize,
-          fileSize,
-          file,
-          chunkName,
-          arrayChunkName,
-          fullUploadURL,
-          totalChunks,
-          statusID
-        );
+      if (chunkIndex < countChunks) {
+        uploadLoop(chunkIndex, chunkSize, fileSize, file, chunkName, chunkNames, fullUploadUrl, countChunks, statusId);
       }
     }, 500);
   }
@@ -192,12 +180,12 @@ const ServerModal = ({ data: serverArray, title, type }: { data?: Server[]; titl
       const chunkSize = 30 * 1024 * 1024; // Set the desired chunk size (30MB in this example)
 
       const fileSize = file?.size || 0;
-      const totalChunks = Math.ceil(fileSize / chunkSize);
+      const countChunks = Math.ceil(fileSize / chunkSize);
 
       let chunkName = helperUtils.RandomString(7);
-      let arrayChunkName: Array<string> = [];
-      for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
-        arrayChunkName.push(chunkName + '_' + chunkIndex);
+      let chunkNames: Array<string> = [];
+      for (let chunkIndex = 0; chunkIndex < countChunks; chunkIndex++) {
+        chunkNames.push(chunkName + '_' + chunkIndex);
       }
       const requestHeaders: HeadersInit = new Headers();
       requestHeaders.set('Content-Type', 'application/json');
@@ -230,21 +218,11 @@ const ServerModal = ({ data: serverArray, title, type }: { data?: Server[]; titl
         const index = 0;
         const uploadURL = checkResult.servers[index].URL;
         const uploadPort = checkResult.servers[index].port || '';
-        const fullUploadURL = checkResult.servers[index].uploadURL;
-        const statusID = checkResult.videoStatus._id;
-        console.log({ uploadURL, uploadPort, fullUploadURL });
+        const fullUploadUrl = checkResult.servers[index].uploadURL;
+        const statusId = checkResult.videoStatus._id;
+        console.log({ uploadURL, uploadPort, fullUploadUrl });
 
-        uploadLoop(
-          chunkIndex,
-          chunkSize,
-          fileSize,
-          file,
-          chunkName,
-          arrayChunkName,
-          fullUploadURL,
-          totalChunks,
-          statusID
-        );
+        uploadLoop(chunkIndex, chunkSize, fileSize, file, chunkName, chunkNames, fullUploadUrl, countChunks, statusId);
       }
     } catch (error) {
       console.log(error);

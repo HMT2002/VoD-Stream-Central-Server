@@ -79,8 +79,8 @@ export const fetchAllInfo = async () => {
   return data;
 };
 
-export const fetchFilmInfoById = async (infoID) => {
-  var url = proxy + '/api/v1/info/film/' + infoID;
+export const fetchFilmInfoById = async (infoId) => {
+  var url = proxy + '/api/v1/info/film/' + infoId;
   const { data } = await axios({
     method: 'get',
     url: url,
@@ -91,31 +91,31 @@ export const fetchFilmInfoById = async (infoID) => {
   return info;
 };
 
-export const uploadLargeVideoPartByPartAndConvertToDashVer2 = async (
+export const processVideoUploadToDashV2 = async (
   formData,
   index,
   chunkName,
-  arrayChunkName,
+  chunkNames,
   filename,
   ext,
   title,
-  infoID,
-  fullUploadURL
+  infoId,
+  fullUploadUrl
 ) => {
   if (!formData) {
     return { status: 'fail' };
   }
-  const { data } = await axios.post(fullUploadURL, formData, {
+  const { data } = await axios.post(fullUploadUrl, formData, {
     validateStatus: () => true,
     headers: {
       type: 'blob',
       index: index,
       chunkname: chunkName,
       filename: filename,
-      arrayChunkName,
+      chunkNames,
       ext,
       title,
-      infoID,
+      infoId,
       // preferurl: '192.168.1.99',
       // preferport: ':9100',
     },
@@ -126,7 +126,7 @@ export const uploadLargeVideoPartByPartAndConvertToDashVer2 = async (
 const transferAPIs = {
   POSTTranferAction,
   POSTDeleteAction,
-  uploadLargeVideoPartByPartAndConvertToDashVer2,
+  processVideoUploadToDashV2,
 };
 
 export default transferAPIs;

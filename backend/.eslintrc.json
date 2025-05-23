@@ -32,6 +32,8 @@
       {
         "argsIgnorePattern": "req|res|next|val"
       }
-    ]
+    ],
+        "camelcase": ["error", {"properties": "always"}]
+
   }
 }

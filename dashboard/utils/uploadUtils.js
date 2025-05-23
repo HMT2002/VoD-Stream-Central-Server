@@ -1,67 +1,70 @@
 import axios from 'axios';
 
-const uploadLargeVideoPartByPartAndConvertToDashVer2 = async (
+const processVideoUploadToDashV2 = async (
   formData,
   index,
-  arrayChunkName,
-  filename,
+  chunkNames,
+  chunkName,
   ext,
   title,
-  infoID,
-  fullUploadURL
+  infoId,
+  fullUploadUrl
 ) => {
+  console.log(formData, index, chunkNames, chunkName, ext, title, infoId, fullUploadUrl);
   if (!formData) {
     return { status: 'fail' };
   }
-  const { data } = await axios.post(fullUploadURL, formData, {
+
+  const { data } = await axios.post(fullUploadUrl, formData, {
     validateStatus: () => true,
     headers: {
       type: 'blob',
       index: index,
-      chunkname: arrayChunkName[index * 1],
-      filename: filename,
-      arrayChunkName,
+      chunkname: chunkNames[index * 1],
+      chunkNames,
       ext,
       title,
-      infoID,
+      infoId,
     },
   });
   return data;
 };
 
-const chunkFormData = (chunk, chunkIndex, arrayChunkName, filename, ext, statusID) => {
+const chunkToFormData = (chunk, chunkIndex, chunkNames, chunkName, ext, statusId) => {
   const formData = axios.toFormData({
-    myMultilPartFileChunk: chunk,
-    myMultilPartFileChunkIndex: chunkIndex,
-    arraychunkname: arrayChunkName,
-    filename: filename + '.' + ext,
-    statusID,
+    multipartFileChunk: chunk,
+    multipartFileChunkIndex: chunkIndex,
+    chunkNames,
+    chunkname: chunkName + '.' + ext,
+    statusId,
   });
   return formData;
 };
-const uploadChunkDashVer2 = async (
+
+const uploadDashVideoChunkV2 = async (
   chunk,
   chunkIndex,
-  arrayChunkName,
-  filename,
+  chunkNames,
+  chunkName,
   ext,
   title,
-  infoID,
-  fullUploadURL,
-  statusID
+  infoId,
+  fullUploadUrl,
+  statusId
 ) => {
   try {
-    const formData = chunkFormData(chunk, chunkIndex, chunkName, arrayChunkName, filename, ext, statusID);
-    console.log(arrayChunkName);
-    const responseDash = await uploadLargeVideoPartByPartAndConvertToDashVer2(
+    console.log(chunk, chunkIndex, chunkNames, chunkName, ext, title, infoId, fullUploadUrl, statusId);
+    const formData = chunkToFormData(chunk, chunkIndex, chunkNames, chunkName, ext, statusId);
+    console.log(chunkNames);
+    const responseDash = await processVideoUploadToDashV2(
       formData,
       chunkIndex,
-      arrayChunkName,
-      filename,
+      chunkNames,
+      chunkName,
       ext,
       title,
-      infoID,
-      fullUploadURL
+      infoId,
+      fullUploadUrl
     );
     console.log(responseDash);
   } catch (error) {
@@ -69,7 +72,7 @@ const uploadChunkDashVer2 = async (
   }
 };
 const uploadUtils = {
-  uploadChunkDashVer2,
+  uploadDashVideoChunkV2,
 };
 
 export default uploadUtils;

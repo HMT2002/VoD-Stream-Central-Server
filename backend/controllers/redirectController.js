@@ -30,7 +30,7 @@ exports.GetAvailableServerHls = catchAsync(async (req, res, next) => {
   const videoname = req.query.videoname;
   const indexServer = req.query.index || 0;
 
-  const video = await redirectAPI.getAvailableVideoAndType(videoname, 'HLS');
+  const video = await redirectAPI.getAvailableVideoWithCondition({ videoname, type: 'HLS' });
 
   const server = await redirectAPI.availableVideoOnServer(video);
 
@@ -72,7 +72,7 @@ exports.GetAvailableServerDash = catchAsync(async (req, res, next) => {
   //   });
   //   return;
   // }
-  const video = await redirectAPI.getAvailableVideoAndType(videoname, 'DASH');
+  const video = await redirectAPI.getAvailableVideoWithCondition({ videoname: videoname, type: 'DASH' });
 
   const server = await redirectAPI.availableVideoOnServer(video);
 
@@ -146,7 +146,7 @@ exports.AllVideoOnServer = catchAsync(async (req, res, next) => {
 exports.RedirectHls = catchAsync(async (req, res, next) => {
   console.log('redirect');
   const videoname = req.params.filename;
-  const video = await redirectAPI.getAvailableVideoAndType(videoname, 'HLS');
+  const video = await redirectAPI.getAvailableVideoWithCondition({ videoname: videoname, type: 'HLS' });
   const server = await redirectAPI.availableVideoOnServer(video);
   if (server.length === 0) {
     res.status(200).json({
@@ -161,7 +161,7 @@ exports.RedirectHls = catchAsync(async (req, res, next) => {
 
   if (videoNumberOfRequest === 50 || videoNumberOfRequest === 100) {
     console.log('Request Reached! ' + videoNumberOfRequest);
-    const replicateResult = await redirectAPI.ReplicateWhenEnoughRequest(video);
+    const replicateResult = await redirectAPI.replicateAgentBasedLoadBalancing(video);
     console.log(replicateResult);
   }
 
@@ -215,7 +215,7 @@ exports.AvailableServerForVideoHls = catchAsync(async (req, res, next) => {
   console.log('AvailableServerForVideoHls');
   const videoname = req.params.filename;
   console.log(videoname);
-  const video = await redirectAPI.getAvailableVideoAndType(videoname, 'HLS');
+  const video = await redirectAPI.getAvailableVideoWithCondition({ videoname: videoname, type: 'HLS' });
 
   const servers = await redirectAPI.availableVideoOnServer(video);
   if (servers.length === 0) {
@@ -233,7 +233,7 @@ exports.AvailableServerForVideoDash = catchAsync(async (req, res, next) => {
   console.log('AvailableServerForVideoDash');
   const videoname = req.params.filename;
   console.log(videoname);
-  const video = await redirectAPI.getAvailableVideoAndType(videoname, 'DASH');
+  const video = await redirectAPI.getAvailableVideoWithCondition({ videoname: videoname, type: 'DASH' });
 
   console.log('video');
   console.log(video);
@@ -252,7 +252,7 @@ exports.AvailableServerForVideoDash = catchAsync(async (req, res, next) => {
 exports.RedirectDash = catchAsync(async (req, res, next) => {
   console.log('redirectController.RedirectDash -> ');
   const videoname = req.params.filename;
-  const video = await redirectAPI.getAvailableVideoAndType(videoname, 'DASH');
+  const video = await redirectAPI.getAvailableVideoWithCondition({ videoname: videoname, type: 'DASH' });
   const servers = await redirectAPI.availableVideoOnServer(video);
   if (servers.length === 0) {
     res.status(200).json({
@@ -264,16 +264,16 @@ exports.RedirectDash = catchAsync(async (req, res, next) => {
   const videoNumberOfRequest = video.numberOfRequest;
   video.numberOfRequest += 1;
   await video.save();
-
+  let isAgentBasedReplicateEnabled = false;
   if (
     // videoNumberOfRequest === 50 ||
     // videoNumberOfRequest === 100 ||
     // videoNumberOfRequest === 150 ||
     // videoNumberOfRequest === 200 ||
-    false
+    isAgentBasedReplicateEnabled
   ) {
     console.log('Request Reached! ' + videoNumberOfRequest);
-    const replicateResult = await redirectAPI.ReplicateWhenEnoughRequest(video);
+    const replicateResult = await redirectAPI.replicateAgentBasedLoadBalancing(video);
     console.log(replicateResult);
   }
 
@@ -291,6 +291,7 @@ exports.RedirectDash = catchAsync(async (req, res, next) => {
   console.log({ updatedSpeed, servernumberofrequest: server.numberOfRequest });
 
   const oriURL = 'http://' + url + port + '/videos/' + videoname + 'Dash/init.mpd';
+  //If there is myaxiosfetch on headers, it web client's redirect request, if not, it media player's request
   if (req.headers.myaxiosfetch) {
     console.log('req.headers.myaxiosfetch existed');
     console.log(oriURL);
@@ -309,7 +310,7 @@ exports.M4SHandler = catchAsync(async (req, res, next) => {
   console.log('m4s handler');
   // console.log(req);
   const filebasename = req.params.filenamebase;
-  const video = await redirectAPI.getAvailableVideoAndType(filebasename, 'DASH');
+  const video = await redirectAPI.getAvailableVideoWithCondition({ videoname: filebasename, type: 'DASH' });
 
   const server = await redirectAPI.availableVideoOnServer(video);
   if (server.length === 0) {
@@ -386,7 +387,7 @@ exports.RedirectReplicateFolderRequest = catchAsync(async (req, res, next) => {
   // await addToServer(video,toURL,toPort);
   // res.redirect(308, 'http://' + url + port + CONSTANTS.SUB_SERVER_REPLICATE_API+ '/send-folder');
 
-  const redirectURL = await redirectAPI.ReplicateVideoFolder(videoname, type, toURL, toPort);
+  const redirectURL = await redirectAPI.replicateDashVideoURL(videoname, type, toURL, toPort);
   console.log(redirectURL);
   if (!redirectURL) {
     res.status(200).json({
@@ -498,26 +499,25 @@ exports.UploadNewFileLargeMultilpartHls = catchAsync(async (req, res, next) => {
 
   console.log('Dealing with request UploadNewFileLargeMultilpartHls');
   console.log(req.headers);
-  let { file, destination, ext, arrayChunkName, filename, orginalname, chunkname, title, infoID } =
-    redirectAPI.sumUp(req);
+  let { file, destination, ext, chunkNames, filename, orginalname, chunkname, title, infoId } = redirectAPI.sumUp(req);
 
   // const file = req.file;
   // const destination = file.destination;
   // const ext = req.headers.ext;
-  // let arrayChunkName = req.body.arraychunkname.split(',');
+  // let chunkNames = req.body.chunkNames.split(',');
   // let filename = req.headers.filename + '_' + req.headers.index;
   // let orginalname = req.headers.filename + '.' + ext;
   // let chunkname = req.headers.chunkname;
   // let title=req.headers.title;
-  // let infoID=req.headers.infoID;
+  // let infoId=req.headers.infoId;
 
   let flag = true;
-  arrayChunkName.forEach((chunkName) => {
+  chunkNames.forEach((chunkName) => {
     if (!fs.existsSync(destination + chunkName)) {
       flag = false;
     }
   });
-  const aliveServers = await redirectAPI.checkFileISExistedOnServerYet(filename, 'HLS');
+  const aliveServers = await redirectAPI.checkIfFileExistsOnServer(filename, 'HLS');
   console.log(aliveServers);
   if (aliveServers.existed === true) {
     res.status(200).json({
@@ -550,27 +550,27 @@ exports.UploadNewFileLargeMultilpartHls = catchAsync(async (req, res, next) => {
     //     await redirectAPI.SendFileToOtherNodeAndConvertToHls(
     //       'http://' + url,
     //       port,
-    //       arrayChunkName,
-    //       arrayChunkName[chunkIndex],
+    //       chunkNames,
+    //       chunkNames[chunkIndex],
     //       destination,
     //       ext,
     //       orginalname
     //     );
 
     //     chunkIndex++; //  increment the counter
-    //     if (chunkIndex < arrayChunkName.length) {
-    //       //  if the counter < totalChunks, call the loop function
+    //     if (chunkIndex < chunkNames.length) {
+    //       //  if the counter < countChunks, call the loop function
     //       uploadLoop(); //  ..  again which will trigger another
     //     } //  ..  setTimeout()
     //   }, 500);
     // }
     // await uploadLoop();
 
-    await redirectAPI.upload(index, url, port, arrayChunkName, ext, destination, orginalname, 'HLS');
+    await redirectAPI.upload(index, url, port, chunkNames, ext, destination, orginalname, 'HLS');
 
     const newVideo = await redirectAPI.createVideo(req.headers.filename, 'HLS', title);
     const addVideoToServer = await redirectAPI.addToServer(newVideo, url, port);
-    const addVideoToInfo = await redirectAPI.addToInfo(newVideo, infoID);
+    const addVideoToInfo = await redirectAPI.addToInfo(newVideo, infoId);
 
     res.status(201).json({
       message: 'success full upload',
@@ -598,15 +598,14 @@ exports.UploadNewFileLargeMultilpartDash = catchAsync(async (req, res, next) => 
   console.log('Dealing with request UploadNewFileLargeMultilpartDash');
   console.log(req.headers);
 
-  let { file, destination, ext, arrayChunkName, filename, orginalname, chunkname, title, infoID } =
-    redirectAPI.sumUp(req);
+  let { file, destination, ext, chunkNames, filename, orginalname, chunkname, title, infoId } = redirectAPI.sumUp(req);
   let flag = true;
-  arrayChunkName.forEach((chunkName) => {
+  chunkNames.forEach((chunkName) => {
     if (!fs.existsSync(destination + chunkName)) {
       flag = false;
     }
   });
-  const aliveServers = await redirectAPI.checkFileISExistedOnServerYet(filename, 'DASH');
+  const aliveServers = await redirectAPI.checkIfFileExistsOnServer(filename, 'DASH');
   console.log(aliveServers);
   if (aliveServers.existed === true) {
     res.status(200).json({
@@ -621,10 +620,10 @@ exports.UploadNewFileLargeMultilpartDash = catchAsync(async (req, res, next) => 
   if (flag) {
     console.log('file is completed');
 
-    await redirectAPI.upload(index, url, port, arrayChunkName, ext, destination, orginalname, 'DASH');
+    await redirectAPI.upload(index, url, port, chunkNames, ext, destination, orginalname, 'DASH');
     const newVideo = await redirectAPI.createVideo(req.headers.filename, 'DASH', title);
     const addVideoToServer = await redirectAPI.addToServer(newVideo, url, port);
-    const addVideoToInfo = await redirectAPI.addToInfo(newVideo, infoID);
+    const addVideoToInfo = await redirectAPI.addToInfo(newVideo, infoId);
 
     res.status(201).json({
       message: 'success full upload',
@@ -650,9 +649,9 @@ exports.UploadNewFileLargeMultilpartDash = catchAsync(async (req, res, next) => 
 
 exports.RequestUploadURLHls = catchAsync(async (req, res, next) => {
   console.log('Dealing with request RequestUploadURLHls');
-  let { file, destination, ext, arrayChunkName, filename, orginalname, chunkname, title, infoID } = req.body;
+  let { file, destination, ext, chunkNames, filename, orginalname, chunkname, title, infoId } = req.body;
   let flag = true;
-  const aliveServers = await redirectAPI.checkFileISExistedOnServerYet(filename, 'HLS');
+  const aliveServers = await redirectAPI.checkIfFileExistsOnServer(filename, 'HLS');
   console.log(aliveServers);
   if (aliveServers.existed === true || aliveServers.noalive === true) {
     res.status(200).json({
@@ -674,7 +673,7 @@ exports.RequestUploadURLHls = catchAsync(async (req, res, next) => {
 
 exports.PreferUploadURL = catchAsync(async (req, res, next) => {
   console.log('Dealing with request PreferUploadURL');
-  let { filename, title, infoID, filesize, preferurl } = req.headers;
+  let { filename, title, infoId, filesize, preferurl } = req.headers;
   if (!preferurl) {
     next();
     return;
@@ -682,7 +681,7 @@ exports.PreferUploadURL = catchAsync(async (req, res, next) => {
   const actual_size = (300000000 * 1.25) / 1000000;
 
   let preferport = req.headers.preferport || '';
-  const video = await redirectAPI.getAvailableVideoAndType(filename, 'DASH');
+  const video = await redirectAPI.getAvailableVideoWithCondition({ videoname: filename, type: 'DASH' });
   if (video !== null) {
     res.status(200).json({
       message: 'There is the same video with filename and type, pick another',
@@ -707,10 +706,10 @@ exports.PreferUploadURL = catchAsync(async (req, res, next) => {
     return;
   }
   const newVideo = await redirectAPI.createVideo(filename, 'DASH', title, actual_size);
-  const d_server = await redirectAPI.getServerWithURLAndPort(preferurl, preferport);
+  const d_server = await redirectAPI.getServerWithCondition({ URL: preferurl, port: preferport });
   const videoStatus = await redirectAPI.createVideoStatus(newVideo, d_server, 'uploading');
   const addVideoToServer = await redirectAPI.addToServer(newVideo, d_server);
-  const addVideoToInfo = await redirectAPI.addToInfo(newVideo, infoID);
+  const addVideoToInfo = await redirectAPI.addToInfo(newVideo, infoId);
 
   res.status(200).json({
     status: 200,
@@ -721,13 +720,12 @@ exports.PreferUploadURL = catchAsync(async (req, res, next) => {
 });
 exports.RequestUploadURLDash = catchAsync(async (req, res, next) => {
   console.log('Dealing with request RequestUploadURLDash');
-  let { file, destination, ext, arrayChunkName, filename, orginalname, chunkname, title, infoID, filesize } =
-    req.headers;
+  let { file, destination, ext, chunkNames, filename, orginalname, chunkname, title, infoId, filesize } = req.headers;
   const actual_size = (300000000 * 1.25) / 1000000;
 
   console.log(req.headers);
   let flag = true;
-  const video = await redirectAPI.getAvailableVideoAndType(filename, 'DASH');
+  const video = await redirectAPI.getAvailableVideoWithCondition({ videoname: filename, type: 'DASH' });
   if (video !== null) {
     res.status(200).json({
       message: 'There is the same video with filename and type, pick another',
@@ -735,7 +733,7 @@ exports.RequestUploadURLDash = catchAsync(async (req, res, next) => {
     });
     return;
   }
-  const aliveServers = await redirectAPI.checkFileISExistedOnServerYet(filename, 'DASH');
+  const aliveServers = await redirectAPI.checkIfFileExistsOnServer(filename, 'DASH');
   if (aliveServers.existed === true || aliveServers.noalive === true) {
     res.status(400).json({
       status: 400,
@@ -746,16 +744,16 @@ exports.RequestUploadURLDash = catchAsync(async (req, res, next) => {
     });
     return;
   }
-  const filteredServer = await storageStrategiesAPI.bestFitFilter(aliveServers, actual_size);
+  const filteredServer = await storageStrategiesAPI.filterBestFit(aliveServers, actual_size);
   const index = 0;
   const url = filteredServer[index].URL || 'localhost';
   const port = filteredServer[index].port || '';
 
   const newVideo = await redirectAPI.createVideo(filename, 'DASH', title, actual_size);
-  const d_server = await redirectAPI.getServerWithURLAndPort(url, port);
+  const d_server = await redirectAPI.getServerWithCondition({ URL: url, port: port });
   const addVideoToServer = await redirectAPI.addToServer(newVideo, d_server);
   const videoStatus = await redirectAPI.createVideoStatus(newVideo, d_server, 'uploading');
-  const addVideoToInfo = await redirectAPI.addToInfo(newVideo, infoID);
+  const addVideoToInfo = await redirectAPI.addToInfo(newVideo, infoId);
 
   // res.status(400).json({
   //   status: 400,
@@ -771,15 +769,14 @@ exports.RequestUploadURLDash = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.RequestUploadURLDashWeightAllocate = catchAsync(async (req, res, next) => {
-  console.log('Dealing with request RequestUploadURLDashWeightAllocate');
-  let { file, destination, ext, arrayChunkName, filename, orginalname, chunkname, title, infoID, filesize } =
-    req.headers;
+exports.getUploadURLDashWeightAllocate = catchAsync(async (req, res, next) => {
+  console.log('Dealing with request getUploadURLDashWeightAllocate');
+  let { file, destination, ext, chunkNames, filename, orginalname, chunkname, title, infoId, filesize } = req.headers;
   console.log(req.headers);
   const actual_size = (300000000 * 1.25) / 1000000;
   let flag = true;
 
-  const video = await redirectAPI.getAvailableVideoAndType(filename, 'DASH');
+  const video = await redirectAPI.getAvailableVideoWithCondition({ videoname: filename, type: 'DASH' });
   if (video !== null) {
     res.status(200).json({
       message: 'There is the same video with filename and type, pick another',
@@ -788,7 +785,7 @@ exports.RequestUploadURLDashWeightAllocate = catchAsync(async (req, res, next) =
     return;
   }
 
-  const aliveServers = await redirectAPI.checkFileISExistedOnServerYet(filename, 'DASH');
+  const aliveServers = await redirectAPI.checkIfFileExistsOnServer(filename, 'DASH');
   if (aliveServers.existed === true || aliveServers.noalive === true) {
     res.status(400).json({
       status: 400,
@@ -800,17 +797,17 @@ exports.RequestUploadURLDashWeightAllocate = catchAsync(async (req, res, next) =
     return;
   }
 
-  const filteredServer = await storageStrategiesAPI.weightAllocateFilter(aliveServers, actual_size);
+  const filteredServer = await storageStrategiesAPI.filterWeightAllocate(aliveServers, actual_size);
 
   const index = 0;
   const url = filteredServer[index].URL || 'localhost';
   const port = filteredServer[index].port || '';
 
   const newVideo = await redirectAPI.createVideo(filename, 'DASH', title, actual_size);
-  const d_server = await redirectAPI.getServerWithURLAndPort(url, port);
+  const d_server = await redirectAPI.getServerWithCondition({ URL: url, port: port });
   const addVideoToServer = await redirectAPI.addToServer(newVideo, d_server);
   const videoStatus = await redirectAPI.createVideoStatus(newVideo, d_server, 'uploading');
-  const addVideoToInfo = await redirectAPI.addToInfo(newVideo, infoID);
+  const addVideoToInfo = await redirectAPI.addToInfo(newVideo, infoId);
 
   res.status(200).json({
     status: 200,
@@ -820,17 +817,16 @@ exports.RequestUploadURLDashWeightAllocate = catchAsync(async (req, res, next) =
   });
 });
 
-exports.RequestUploadURLDashBestFit = catchAsync(async (req, res, next) => {
-  // console.log('Dealing with request RequestUploadURLDashWeightAllocate');
-  console.log('redirectController -> redirectController.RequestUploadURLDashBestFit -> ');
-  let { file, destination, ext, arrayChunkName, filename, orginalname, chunkname, title, infoID, filesize } =
-    req.headers;
+exports.getUploadURLDashBestFit = catchAsync(async (req, res, next) => {
+  // console.log('Dealing with request getUploadURLDashWeightAllocate');
+  console.log('redirectController -> redirectController.getUploadURLDashBestFit -> ');
+  let { file, destination, ext, chunkNames, filename, orginalname, chunkname, title, infoId, filesize } = req.headers;
   console.log(req.headers);
   const actual_size = (300000000 * 1.25) / 1000000;
 
   let flag = true;
 
-  const video = await redirectAPI.getAvailableVideoAndType(filename, 'DASH');
+  const video = await redirectAPI.getAvailableVideoWithCondition({ videoname: filename, type: 'DASH' });
   if (video !== null) {
     res.status(200).json({
       message: 'There is the same video with filename and type, pick another',
@@ -839,7 +835,7 @@ exports.RequestUploadURLDashBestFit = catchAsync(async (req, res, next) => {
     return;
   }
 
-  const aliveServers = await redirectAPI.checkFileISExistedOnServerYet(filename, 'DASH');
+  const aliveServers = await redirectAPI.checkIfFileExistsOnServer(filename, 'DASH');
   if (aliveServers.existed === true || aliveServers.noalive === true) {
     res.status(400).json({
       status: 400,
@@ -851,17 +847,17 @@ exports.RequestUploadURLDashBestFit = catchAsync(async (req, res, next) => {
     return;
   }
 
-  const filteredServer = await storageStrategiesAPI.bestFitFilter(aliveServers, actual_size);
+  const filteredServer = await storageStrategiesAPI.filterBestFit(aliveServers, actual_size);
 
   const index = 0;
   const url = filteredServer[index].URL || 'localhost';
   const port = filteredServer[index].port || '';
 
   const newVideo = await redirectAPI.createVideo(filename, 'DASH', title, actual_size);
-  const d_server = await redirectAPI.getServerWithURLAndPort(url, port);
+  const d_server = await redirectAPI.getServerWithCondition({ URL: url, port: port });
   const videoStatus = await redirectAPI.createVideoStatus(newVideo, d_server, 'uploading');
   const addVideoToServer = await redirectAPI.addToServer(newVideo, d_server);
-  const addVideoToInfo = await redirectAPI.addToInfo(newVideo, infoID);
+  const addVideoToInfo = await redirectAPI.addToInfo(newVideo, infoId);
 
   res.status(200).json({
     status: 200,
@@ -871,16 +867,15 @@ exports.RequestUploadURLDashBestFit = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.RequestUploadURLDashFirstFit = catchAsync(async (req, res, next) => {
-  console.log('Dealing with request RequestUploadURLDashWeightAllocate');
-  let { file, destination, ext, arrayChunkName, filename, orginalname, chunkname, title, infoID, filesize } =
-    req.headers;
+exports.getUploadURLDashFirstFit = catchAsync(async (req, res, next) => {
+  console.log('Dealing with request getUploadURLDashWeightAllocate');
+  let { file, destination, ext, chunkNames, filename, orginalname, chunkname, title, infoId, filesize } = req.headers;
   console.log(req.headers);
   const actual_size = (300000000 * 1.25) / 1000000;
 
   let flag = true;
 
-  const video = await redirectAPI.getAvailableVideoAndType(filename, 'DASH');
+  const video = await redirectAPI.getAvailableVideoWithCondition({ videoname: filename, type: 'DASH' });
   if (video !== null) {
     res.status(200).json({
       message: 'There is the same video with filename and type, pick another',
@@ -889,7 +884,7 @@ exports.RequestUploadURLDashFirstFit = catchAsync(async (req, res, next) => {
     return;
   }
 
-  const aliveServers = await redirectAPI.checkFileISExistedOnServerYet(filename, 'DASH');
+  const aliveServers = await redirectAPI.checkIfFileExistsOnServer(filename, 'DASH');
   if (aliveServers.existed === true || aliveServers.noalive === true) {
     res.status(400).json({
       status: 400,
@@ -901,17 +896,17 @@ exports.RequestUploadURLDashFirstFit = catchAsync(async (req, res, next) => {
     return;
   }
 
-  const filteredServer = await storageStrategiesAPI.firstFitFilter(aliveServers, actual_size);
+  const filteredServer = await storageStrategiesAPI.filterFirstFit(aliveServers, actual_size);
 
   const index = 0;
   const url = filteredServer[index].URL || 'localhost';
   const port = filteredServer[index].port || '';
 
   const newVideo = await redirectAPI.createVideo(filename, 'DASH', title, actual_size);
-  const d_server = await redirectAPI.getServerWithURLAndPort(url, port);
+  const d_server = await redirectAPI.getServerWithCondition({ URL: url, port: port });
   const addVideoToServer = await redirectAPI.addToServer(newVideo, d_server);
   const videoStatus = await redirectAPI.createVideoStatus(newVideo, d_server, 'uploading');
-  const addVideoToInfo = await redirectAPI.addToInfo(newVideo, infoID);
+  const addVideoToInfo = await redirectAPI.addToInfo(newVideo, infoId);
 
   res.status(200).json({
     status: 200,
@@ -925,7 +920,7 @@ exports.GetAvailableStorageForVideo = catchAsync(async (req, res, next) => {
   console.log('Dealing with request GetAvailableStorageForVideo');
   const videoname = req.body.videoname || 'GSpR1T8';
   const type = req.body.type || 'HLS';
-  const video = await redirectAPI.getAvailableVideoAndType(videoname, type);
+  const video = await redirectAPI.getAvailableVideoWithCondition({ videoname: videoname, type: type });
   const server = await redirectAPI.availableStorageOnServer(video);
   if (server.length === 0) {
     console.log('There is no more available storage, the video and type is everywhere! ' + videoname + ' ' + type);

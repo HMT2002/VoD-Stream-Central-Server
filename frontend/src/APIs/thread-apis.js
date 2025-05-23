@@ -37,8 +37,8 @@ export const fetchAllInfo = async () => {
   return data;
 };
 
-export const fetchFilmInfoById = async (infoID) => {
-  var url = '/api/v1/info/film/' + infoID;
+export const fetchFilmInfoById = async (infoId) => {
+  var url = '/api/v1/info/film/' + infoId;
   const { data } = await axios({
     method: 'get',
     url: url,
@@ -114,11 +114,11 @@ export const uploadLargeVideoPartByPartAndConvertToHls = async (
   formData,
   index,
   chunkName,
-  arrayChunkName,
+  chunkNames,
   filename,
   ext,
   title,
-  infoID
+  infoId
 ) => {
   if (!formData) {
     return { status: 'fail' };
@@ -132,10 +132,10 @@ export const uploadLargeVideoPartByPartAndConvertToHls = async (
       index: index,
       chunkname: chunkName,
       filename: filename,
-      arrayChunkName,
+      chunkNames,
       ext,
       title,
-      infoID: infoID,
+      infoId: infoId,
     },
   });
   const data = await response.json();
@@ -147,11 +147,11 @@ export const uploadLargeVideoPartByPartAndConvertToDash = async (
   formData,
   index,
   chunkName,
-  arrayChunkName,
+  chunkNames,
   filename,
   ext,
   title,
-  infoID
+  infoId
 ) => {
   if (!formData) {
     return { status: 'fail' };
@@ -164,10 +164,10 @@ export const uploadLargeVideoPartByPartAndConvertToDash = async (
       index: index,
       chunkname: chunkName,
       filename: filename,
-      arrayChunkName,
+      chunkNames,
       ext,
       title,
-      infoID,
+      infoId,
     },
   });
   const data = await response.json();
@@ -175,41 +175,41 @@ export const uploadLargeVideoPartByPartAndConvertToDash = async (
   return data;
 };
 
-export const uploadLargeVideoPartByPartAndConvertToDashVer2 = async (
+export const processVideoUploadToDashV2 = async (
   formData,
   index,
   chunkName,
-  arrayChunkName,
+  chunkNames,
   filename,
   ext,
   title,
-  infoID,
-  fullUploadURL
+  infoId,
+  fullUploadUrl
 ) => {
   if (!formData) {
     return { status: 'fail' };
   }
-  const { data } = await axios.post(fullUploadURL, formData, {
+  const { data } = await axios.post(fullUploadUrl, formData, {
     validateStatus: () => true,
     headers: {
       type: 'blob',
       index: index,
       chunkname: chunkName,
       filename: filename,
-      arrayChunkName,
+      chunkNames,
       ext,
       title,
-      infoID,
+      infoId,
     },
   });
   return data;
 };
 
-export const uploadLargeVideoPartByPartAndConcatenate = async (arrayChunkName, filename, destination, ext) => {
+export const uploadLargeVideoPartByPartAndConcatenate = async (chunkNames, filename, destination, ext) => {
   const response = await fetch('/api/test/upload-video-large-multipart-concatenate', {
     method: 'POST',
     body: JSON.stringify({
-      arraychunkname: arrayChunkName,
+      chunkNames: chunkNames,
     }),
     headers: {
       'Content-Type': 'application/json',
@@ -223,7 +223,7 @@ export const uploadLargeVideoPartByPartAndConcatenate = async (arrayChunkName, f
   return data;
 };
 
-export const uploadLargeVideoPartByPart_OPTIONS = async (formData, index, chunkName, arrayChunkName, filename, ext) => {
+export const uploadLargeVideoPartByPart_OPTIONS = async (formData, index, chunkName, chunkNames, filename, ext) => {
   if (!formData) {
     return { status: 'fail' };
   }
@@ -235,7 +235,7 @@ export const uploadLargeVideoPartByPart_OPTIONS = async (formData, index, chunkN
       index: index,
       chunkname: chunkName,
       filename: filename,
-      arrayChunkName,
+      chunkNames,
       ext,
     },
   });
@@ -244,11 +244,11 @@ export const uploadLargeVideoPartByPart_OPTIONS = async (formData, index, chunkN
   return data;
 };
 
-export const uploadLargeVideoPartByPartAndConcatenate_OPTIONS = async (arrayChunkName, filename, destination, ext) => {
+export const uploadLargeVideoPartByPartAndConcatenate_OPTIONS = async (chunkNames, filename, destination, ext) => {
   const response = await fetch('/redirect/upload-video-large-multipart-concatenate', {
     method: 'OPTIONS',
     body: JSON.stringify({
-      arraychunkname: arrayChunkName,
+      chunkNames: chunkNames,
     }),
     headers: {
       'Content-Type': 'application/json',
@@ -262,11 +262,11 @@ export const uploadLargeVideoPartByPartAndConcatenate_OPTIONS = async (arrayChun
   return data;
 };
 
-// export const uploadLargeVideoPartByPartAndConcatenateTest = async (arrayChunkName, filename, destination,ext) => {
+// export const uploadLargeVideoPartByPartAndConcatenateTest = async (chunkNames, filename, destination,ext) => {
 //   const response = await fetch('/api/test/upload-video-large-multipart-concatenate', {
 //     method: 'POST',
 //     body:JSON.stringify( {
-//       arraychunkname:arrayChunkName,
+//       chunkNames:chunkNames,
 //     }),
 //     headers: {
 //       'Content-Type': 'application/json',
@@ -396,7 +396,7 @@ const threadAPIs = {
   uploadLargeVideoPartByPartAndConcatenate,
   uploadLargeVideoPartByPart_OPTIONS,
   uploadLargeVideoPartByPartAndConcatenate_OPTIONS,
-  uploadLargeVideoPartByPartAndConvertToDashVer2,
+  processVideoUploadToDashV2,
 };
 
 export default threadAPIs;

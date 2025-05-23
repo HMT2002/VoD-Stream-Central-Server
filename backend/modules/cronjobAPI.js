@@ -36,9 +36,9 @@ const getAvailableServerForVideo = async (video) => {
   return servers;
 };
 
-const getAvailableVideo = async (videoname, type) => {
-  const availVideo = await Video.findOne({ videoname: videoname, type: type });
-  return availVideo;
+const getAvailableVideo = async (queryObj) => {
+  const availVideoAndType = await Video.findOne(queryObj);
+  return availVideoAndType;
 };
 
 const getAvailableServersStorage = async (video) => {
@@ -72,14 +72,8 @@ const availableStorageTest = async (videoname, type) => {
 };
 
 const availableStorage = async (video) => {
-  // const video = await getAvailableVideoAndType(videoname, type);
   const availableServersStorage = await getAvailableServersStorage(video);
   return availableServersStorage;
-};
-
-const getAvailableVideoAndType = async (videoname, type) => {
-  const availVideoAndType = await Video.findOne({ videoname: videoname, type: type });
-  return availVideoAndType;
 };
 
 const calculateTime = async (baseUrl) => {
@@ -181,7 +175,7 @@ const getMyNetworkStorageSpeed = async (url, port, videofolder) => {
   return calculateTimeStorage(baseUrl);
 };
 
-const getMyNetworkAliveCondition = async (url, port) => {
+const getNetworkCondition = async (url, port) => {
   const baseUrl = 'http://' + url + port + '/is-this-alive';
   return checkConditionAndFilter(baseUrl);
 };
@@ -247,7 +241,7 @@ const testSpeedResults = async (video) => {
   return testResults;
 };
 
-const testServerIsFckingAlive = async () => {
+const checkServersHealth = async () => {
   const availableServer = await getAllServers();
   if (availableServer.length === 0) {
     console.log('Not found any server');
@@ -255,7 +249,7 @@ const testServerIsFckingAlive = async () => {
   }
   let testResults = [];
   for (let i = 0; i < availableServer.length; i++) {
-    condition = await getMyNetworkAliveCondition(availableServer[i].URL, availableServer[i].port);
+    condition = await getNetworkCondition(availableServer[i].URL, availableServer[i].port);
     if (condition !== null) {
       testResults.push({ ...condition, URL: availableServer[i].URL, port: availableServer[i].port });
     }
@@ -300,7 +294,7 @@ const availableVideoOnServer = async (video) => {
   return availableVideoOnServer;
 };
 
-const ReplicateWhenEnoughRequest = async (video) => {
+const replicateAgentBasedLoadBalancing = async (video) => {
   const availableStorage = await availableStorageOnServer(video);
   console.log(availableStorage);
   if (availableStorage.length === 0) {
@@ -312,7 +306,7 @@ const ReplicateWhenEnoughRequest = async (video) => {
   const index = 0;
   const toURL = availableStorage[index].URL;
   const toPort = availableStorage[index].port;
-  const redirectURL = await ReplicateVideoFolder(video.videoname, video.type, toURL, toPort);
+  const redirectURL = await replicateDashVideoURL(video.videoname, video.type, toURL, toPort);
   const folderType = video.type === 'HLS' ? 'Hls' : 'Dash';
   await axios({
     method: 'post',
@@ -325,7 +319,7 @@ const ReplicateWhenEnoughRequest = async (video) => {
   return redirectURL;
 };
 
-const ReplicateVideoFolder = async (videoname, type, toURL, toPort) => {
+const replicateDashVideoURL = async (videoname, type, toURL, toPort) => {
   const video = await Video.findOne({ videoname, type });
   const server = await availableVideoOnServer(video);
   console.log(server);
@@ -402,7 +396,7 @@ exports.DeleteFolderWithVideoIDRequest = async (url, port, videoID) => {
 };
 
 const getAllAliveServer = async () => {
-  const allAliveServer = await testServerIsFckingAlive();
+  const allAliveServer = await checkServersHealth();
   console.log(allAliveServer);
   return allAliveServer;
 };

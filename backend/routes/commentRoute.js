@@ -28,7 +28,7 @@ router
   .get(actionController.GetVideoByID, actionController.GetAllVideoCommentWithVideoID);
 
 router
-  .route('/info/:infoID')
+  .route('/info/:infoId')
   .post(
     authController.protect,
     authController.restrictTo('admin', 'user', 'content-creator'),

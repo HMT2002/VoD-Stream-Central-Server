@@ -65,7 +65,7 @@ const getDashUrl = async (filename) => {
 const VideoDemo = () => {
   const authContext = useContext(AuthContext);
   const params = useParams();
-  const infoID = params.filename;
+  const infoId = params.filename;
   // const [source, setSource] = useState('/videos/MY Heart Rate.mp4');
   // const [reactPlayerURLDash, setReactPlayerURLDash] = useState('');
   // const [reactPlayerURLHls, setReactPlayerURLHls] = useState('');
@@ -134,7 +134,7 @@ const VideoDemo = () => {
         //   // Player is instance of Dash.js MediaPlayer;
         //   controlbar.initialize();
         // }
-        const fetchInfo = await fetchFilmInfoById(infoID);
+        const fetchInfo = await fetchFilmInfoById(infoId);
         if (fetchInfo === null) {
           return;
         }
