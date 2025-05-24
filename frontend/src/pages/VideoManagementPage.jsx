@@ -1,12 +1,17 @@
 import { Download, ChevronDown, User } from 'lucide-react';
 import React, { useContext, useEffect, useState, useRef, useCallback } from 'react';
+import videoAPIs from '../APIs/video-apis';
 
 export default function SupportTicketTable() {
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedVideos, setSelectedVideos] = useState([]);
+  const [selectedFilm, setSelectedFilm] = useState({ _id: '' });
+
   // Add these states for pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [activeStatus, setActiveStatus] = useState('all');
+  const [videos, setVideos] = useState([]);
+  const [films, setFilms] = useState([]);
 
   const tickets = [
     {
@@ -218,28 +223,34 @@ export default function SupportTicketTable() {
     },
   ];
 
-  const handleSelectAll = (event) => {
+  const handleSelectAllVideo = (event) => {
     if (event.target.checked) {
-      setSelectedItems(tickets.map((ticket) => ticket.id));
+      setSelectedVideos(videos.map((video) => video._id));
     } else {
-      setSelectedItems([]);
+      setSelectedVideos([]);
     }
   };
 
-  const handleSelect = (id) => {
-    const selectedIndex = selectedItems.indexOf(id);
+  const handleSelectVideo = (id) => {
+    const selectedVideoIndex = selectedVideos.indexOf(id);
     let newSelected = [];
 
-    if (selectedIndex === -1) {
-      newSelected = [...selectedItems, id];
+    if (selectedVideoIndex === -1) {
+      newSelected = [...selectedVideos, id];
     } else {
-      newSelected = selectedItems.filter((item) => item !== id);
+      newSelected = selectedVideos.filter((item) => item !== id);
     }
-
-    setSelectedItems(newSelected);
+    setSelectedVideos(newSelected);
   };
 
-  const isSelected = (id) => selectedItems.indexOf(id) !== -1;
+  const handleSelectFilm = (id) => {
+    const selectedFilmIndex = films.findIndex((film) => film._id === id);
+    var film = films[selectedFilmIndex];
+    console.log(film);
+    setSelectedFilm(film);
+  };
+
+  const isSelected = (id) => selectedVideos.indexOf(id) !== -1;
 
   // Function to get appropriate status chip color classes
   const getStatusClasses = (status) => {
@@ -255,19 +266,59 @@ export default function SupportTicketTable() {
     }
   };
 
-  // Function to filter tickets based on activeStatus
-  const getFilteredTickets = () => {
-    if (activeStatus === 'all') return tickets;
-    return tickets.filter((ticket) => ticket.status === activeStatus);
+  // Function to filter videos based on activeStatus
+  const getFilteredVideos = () => {
+    if (selectedFilm._id === '') return videos;
+    console.log(videos);
+    return videos.filter((video) => video.filmId === selectedFilm._id);
   };
   // Calculate pagination values
-  const filteredTickets = getFilteredTickets();
+  const filteredTickets = getFilteredVideos();
   const totalItems = filteredTickets.length;
   const totalPages = Math.ceil(totalItems / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = Math.min(startIndex + rowsPerPage, totalItems);
-  const currentItems = filteredTickets.slice(startIndex, endIndex);
+  const currentVideos = filteredTickets.slice(startIndex, endIndex);
   console.log({ startIndex, endIndex });
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        console.log('VideoManagementPage -> useEffect -> fetchVideos -> videoAPIs.getAllVideoForDashboard()');
+        const fetchedInfo = await videoAPIs.getAllVideoForDashboard();
+        console.log(fetchedInfo);
+        if (fetchedInfo?.videos?.length > 0) {
+          setVideos(fetchedInfo.videos);
+        }
+      } catch (error) {
+        console.log('VideoManagementPage -> useEffect -> fetchVideos -> catch');
+        console.log(error);
+        // Silent error handling
+      } finally {
+      }
+    };
+    fetchVideos();
+  }, []);
+
+  useEffect(() => {
+    const fetchFilms = async () => {
+      try {
+        console.log('VideoManagementPage -> useEffect -> fetchFilms -> videoAPIs.getAllFilmForDashboard()');
+        const fetchedInfo = await videoAPIs.getAllFilmForDashboard();
+        console.log(fetchedInfo);
+        if (fetchedInfo?.films?.length > 0) {
+          setFilms(fetchedInfo.films);
+        }
+      } catch (error) {
+        console.log('VideoManagementPage -> useEffect -> fetchFilms -> catch');
+        console.log(error);
+        // Silent error handling
+      } finally {
+      }
+    };
+    fetchFilms();
+  }, []);
+
   return (
     <React.Fragment>
       <div className="w-full font-sans">
@@ -311,14 +362,30 @@ export default function SupportTicketTable() {
           <div className="w-44 bg-blue-50 rounded p-2 ">
             <div
               className={`p-1 flex justify-between hover:bg-zinc-950 hover:text-green-500 ${
-                activeStatus === 'all' ? 'text-green-500 bg-zinc-950' : ''
+                selectedFilm._id === '' ? 'text-green-500 bg-zinc-950' : ''
               }`}
-              onClick={() => setActiveStatus('all')}
+              onClick={() => {
+                setActiveStatus('all');
+                setSelectedFilm({ _id: '' });
+              }}
             >
-              <span className="text-sm font-bold">All</span>
-              <span className="text-sm ">13</span>
+              <span className="text-sm">All</span>
+              <span className="text-sm ">30</span>
             </div>
-
+            {films.map((film) => (
+              <div
+                className={`p-1 flex justify-between hover:bg-zinc-950 hover:text-green-500 ${
+                  selectedFilm._id === film._id ? 'text-green-500 bg-zinc-950' : ''
+                }`}
+                onClick={() => {
+                  handleSelectFilm(film._id);
+                }}
+              >
+                <span className="text-sm font-bold">{film.filmInfo.name}</span>
+                <span className="text-sm ">{30}</span>
+              </div>
+            ))}
+            {/* 
             <div
               className={`p-1 flex justify-between hover:bg-zinc-950 hover:text-green-500 ${
                 activeStatus === 'open' ? 'text-green-500 bg-zinc-950' : ''
@@ -347,7 +414,7 @@ export default function SupportTicketTable() {
             >
               <span className="text-sm">Closed</span>
               <span className="text-sm ">8</span>
-            </div>
+            </div> */}
           </div>
 
           {/* Main Table Section */}
@@ -360,30 +427,30 @@ export default function SupportTicketTable() {
                       <input
                         type="checkbox"
                         className="w-4 h-4"
-                        checked={selectedItems.length === tickets.length && tickets.length > 0}
-                        onChange={handleSelectAll}
+                        checked={selectedVideos.length === videos.length && videos.length > 0}
+                        onChange={handleSelectAllVideo}
                       />
                     </th>
-                    <th className="p-2 text-left text-sm font-medium">Customer</th>
+                    <th className="p-2 text-left text-sm font-medium">Episode/Episode Title</th>
                     <th className="p-2 text-left text-sm font-medium">
                       <div className="flex items-center">
-                        <span>Date</span>
+                        <span>Film</span>
                         <ChevronDown size={16} className="ml-1" />
                       </div>
                     </th>
-                    <th className="p-2 text-left text-sm font-medium">Subject</th>
-                    <th className="p-2 text-left text-sm font-medium">From</th>
+                    <th className="p-2 text-left text-sm font-medium">Server</th>
+                    <th className="p-2 text-left text-sm font-medium">Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {currentItems.map((ticket) => (
-                    <tr key={ticket.id} className="border-b border-gray-200 hover:bg-gray-50">
+                  {currentVideos.map((video) => (
+                    <tr key={video.id} className="border-b border-gray-200 hover:bg-gray-50">
                       <td className="p-2">
                         <input
                           type="checkbox"
                           className="w-4 h-4"
-                          checked={isSelected(ticket.id)}
-                          onChange={() => handleSelect(ticket.id)}
+                          checked={isSelected(video._id)}
+                          onChange={() => handleSelectVideo(video._id)}
                         />
                       </td>
                       <td className="p-2">
@@ -391,21 +458,26 @@ export default function SupportTicketTable() {
                           <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden mr-2">
                             <User size={16} className="text-gray-600" />
                           </div>
-                          <span className="text-sm">{ticket.customer}</span>
+                          <span className="text-sm">{video.title}</span>
                         </div>
                       </td>
-                      <td className="p-2 text-sm">{ticket.time || ticket.date}</td>
+                      <td className="p-2 text-sm">
+                        {video.filmNames}
+                        <select>
+                          <option value={video.filmId}>{video.filmNames}</option>
+                        </select>
+                      </td>
                       <td className="p-2">
                         <div>
-                          <div className="text-sm font-medium">{ticket.subject}</div>
-                          <div className="text-sm text-gray-500 truncate max-w-md">- {ticket.message}</div>
+                          <div className="text-sm font-medium">{video.subject}</div>
+                          <div className="text-sm text-gray-500 truncate max-w-md">{video.serverURLs}</div>
                         </div>
                       </td>
                       <td className="p-2">
                         <div className="flex justify-between items-center">
-                          <span className="text-sm">{ticket.from}</span>
-                          <span className={`text-xs px-2 py-1 rounded-full ${getStatusClasses(ticket.status)}`}>
-                            {ticket.status}
+                          <span className="text-sm">{video.from}</span>
+                          <span className={`text-xs px-2 py-1 rounded-full ${getStatusClasses(video.status)}`}>
+                            {video.status}
                           </span>
                         </div>
                       </td>
@@ -414,7 +486,6 @@ export default function SupportTicketTable() {
                 </tbody>
               </table>
             </div>
-            // Replace your current pagination section with this
             <div className="flex items-center justify-between mt-4">
               <div className="flex items-center">
                 <span className="text-sm mr-2">Rows per page:</span>

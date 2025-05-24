@@ -14,9 +14,9 @@ const APIFeatures = require('./../utils/apiFeatures');
 const { exec, execFileSync, spawn } = require('child_process');
 
 const fluentFfmpeg = require('fluent-ffmpeg');
+const Video = require('../models/mongo/Video');
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 fluentFfmpeg.setFfmpegPath(ffmpegPath);
-
 
 exports.ASSHandler = catchAsync(async (req, res, next) => {
   console.log('ass is here');
@@ -687,4 +687,74 @@ exports.VideoPlayOPTIONS = catchAsync(async (req, res, next) => {
       }
     })
     .run();
+});
+exports.getAllVideosForDashboard = catchAsync(async (req, res, next) => {
+  console.log('Dealing with getAllVideosForDashboard');
+  let videos = [];
+  const videosDB = await Video.aggregate([
+    // Lookup Infos
+    {
+      $lookup: {
+        from: 'infos',
+        localField: '_id',
+        foreignField: 'videos',
+        as: 'infos',
+      },
+    },
+    // Lookup Servers
+    {
+      $lookup: {
+        from: 'servers',
+        localField: '_id',
+        foreignField: 'videos',
+        as: 'servers',
+      },
+    },
+    // Add computed fields
+    {
+      $addFields: {
+        // filmNames: '$infos.filmInfo.name',
+        // serverUrls: '$servers.URL',
+        // Optional: combine both
+        associations: {
+          filmIds: '$infos._id',
+          filmNames: '$infos.filmInfo.name',
+          serverURLs: '$servers.URL',
+        },
+      },
+    },
+    // Clean up - remove full objects if not needed
+    {
+      $project: {
+        infos: 0, // Remove the full film objects if you only need names
+        servers: 0,
+      },
+    },
+  ]);
+  for (let i = 0; i < videosDB.length; i++) {
+    console.log(videosDB[i]);
+    let video = {};
+    video._id = videosDB[i]._id;
+    video.title = videosDB[i].title;
+    video.status = videosDB[i].status;
+
+    if (videosDB[i].associations.filmNames.length > 0) {
+      video.filmNames = videosDB[i].associations.filmNames.join(' - ');
+      video.filmId = videosDB[i].associations.filmIds[0];
+    } else {
+      video.filmNames = 'Not assigned yet';
+      video.filmId = '';
+    }
+
+    if (videosDB[i].associations.serverURLs.length > 0) {
+      video.serverURLs = videosDB[i].associations.serverURLs.join(' - ');
+    } else {
+      video.serverURLs = 'No replicate';
+    }
+    videos.push(video);
+  }
+  res.status(200).json({
+    message: 'All videos',
+    data: { videos: videos },
+  });
 });

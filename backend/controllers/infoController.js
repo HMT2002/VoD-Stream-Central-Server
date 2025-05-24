@@ -146,3 +146,19 @@ exports.CreateInfoTV = catchAsync(async (req, res, next) => {
     data: tv,
   });
 });
+exports.getAllFilmsForDashboard = catchAsync(async (req, res, next) => {
+  console.log('Dealing with getAllFilmsForDashboard');
+  let films = [];
+  const filmsDB = await Info.find({});
+  for (let i = 0; i < filmsDB.length; i++) {
+    console.log(filmsDB[i]);
+    let film = {};
+    film._id = filmsDB[i]._id;
+    film.filmInfo = filmsDB[i].filmInfo;
+    films.push(film);
+  }
+  res.status(200).json({
+    message: 'All films',
+    data: { films: films },
+  });
+});

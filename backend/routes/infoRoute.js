@@ -38,5 +38,6 @@ router
     infoController.GetInfoByID,
     infoController.AddEpisodes
   );
+router.route('/dashboard').get(infoController.getAllFilmsForDashboard);
 
 module.exports = router;
